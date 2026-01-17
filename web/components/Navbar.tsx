@@ -1,0 +1,62 @@
+"use client"
+
+import { Menu, Search } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+interface Props {
+  onSearch?: (query: string) => void
+}
+
+export default function Navbar({ onSearch }: Props) {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+  return (
+    <header className={`fixed top-0 w-full z-50 transition-colors duration-300 ${isScrolled ? "bg-[#141414]" : "bg-gradient-to-b from-black/80 to-transparent"}`}>
+      <div className="flex items-center justify-between px-4 md:px-12 h-16 md:h-20">
+        <div className="flex items-center gap-4 md:gap-10">
+          <Link href="/" className="text-white text-2xl md:text-3xl font-bold cursor-pointer tracking-wider">
+            MOVIEKITA
+          </Link>
+          <div className="hidden md:flex items-center bg-zinc-800/80 border border-gray-700 rounded-full px-3 py-1.5 transition-all focus-within:border-gray-500 focus-within:bg-zinc-800">
+            <Search className="w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search movies..."
+              className="bg-transparent border-none text-white text-sm outline-none ml-2 w-48 lg:w-64 placeholder-gray-400"
+              onChange={(e) => onSearch?.(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-4 text-white bg-transparent">
+          <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <Menu className="w-8 h-8" />
+          </button>
+        </div>
+      </div>
+
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-zinc-900 absolute top-16 left-0 w-full p-4 flex flex-col gap-4 text-center text-sm text-gray-400 font-medium border-t border-gray-800 animate-in slide-in-from-top-2">
+          {/* TODO: navigasi list */}
+        </div>
+      )}
+    </header>
+  )
+}
