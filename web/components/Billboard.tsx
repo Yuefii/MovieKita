@@ -17,7 +17,7 @@ export function Billboard({
       <div className="absolute top-0 left-0 w-full h-full brightness-[60%]">
         <Image
           src={TMDB_ORIGINAL_IMG_URL + `${movie.backdrop_path}`}
-          alt={movie.title}
+          alt={movie.title || movie.name}
           fill
           className="object-cover"
           priority
