@@ -35,6 +35,18 @@ class MomentController extends Controller
   {
     $validated = $request->validated();
 
+    // Rate Limiting: maksimal 2 upload dalam sehari untuk setiap user per movie
+    $todayCount = UserMoment::where('user_name', $request->user_name)
+      ->where('movie_id', $request->movie_id)
+      ->whereDate('created_at', now()->today())
+      ->count();
+
+    if ($todayCount >= 2) {
+      return response()->json([
+        'message' => 'you have reached the daily upload limit for this movie (Max 2 photos).'
+      ], 429);
+    }
+
     if ($request->hasFile('image')) {
       $path = $request->file('image')->store('moments', 'public');
 

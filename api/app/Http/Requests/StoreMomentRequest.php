@@ -16,7 +16,7 @@ class StoreMomentRequest extends FormRequest
         return [
             'movie_id' => 'required',
             'user_name' => 'required|string',
-            'image' => 'required|image|max:10240',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
             'location' => 'required|string',
         ];
     }
@@ -27,7 +27,7 @@ class StoreMomentRequest extends FormRequest
             'location.required' => 'Location is required. Make sure GPS is enabled and location permission is granted.',
             'image.required' => 'Image is required.',
             'image.image' => 'File must be an image.',
-            'image.max' => 'Image size must not exceed 10MB.',
+            'image.max' => 'Image size must not exceed 5MB.',
             'user_name.required' => 'User name is required.',
         ];
     }
