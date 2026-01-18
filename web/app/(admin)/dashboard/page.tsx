@@ -38,14 +38,6 @@ export default function Page() {
         }
     }, [user, router])
 
-    if (!user || user.role !== 'admin') {
-        return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
-            </div>
-        )
-    }
-
     useEffect(() => {
         if (statsData && movies.nowPlaying?.results) {
             const { stats, total_users } = statsData;
@@ -75,6 +67,14 @@ export default function Page() {
             })
         }
     }, [statsData, movies.nowPlaying])
+
+    if (!user || user.role !== 'admin') {
+        return (
+            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+            </div>
+        )
+    }
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 font-sans">
