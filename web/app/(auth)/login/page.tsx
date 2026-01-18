@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Input from "@/components/ui/Input"
 import { useAuth } from "@/hooks/use_auth"
 import { useState } from "react"
 import { ArrowLeft, Lock, Mail } from "lucide-react"
@@ -54,41 +55,27 @@ export default function Page() {
               Something went wrong.
             </div>
           )}
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-blue-600 transition"
-                placeholder="email@example.com"
-                required
-                disabled={loading}
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-blue-600 transition"
-                placeholder="••••••"
-                required
-                disabled={loading}
-              />
-            </div>
-            {errors.password && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.password[0]}
-              </div>
-            )}
-          </div>
+          <Input
+            label="Email"
+            icon={Mail}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email@example.com"
+            required
+            disabled={loading}
+          />
+          <Input
+            label="Password"
+            icon={Lock}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            required
+            disabled={loading}
+            error={errors.password?.[0]}
+          />
           <button
             type="submit"
             disabled={loading}

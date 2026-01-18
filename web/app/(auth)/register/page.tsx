@@ -1,9 +1,10 @@
 "use client"
 
-import { useAuth } from "@/hooks/use_auth"
-import { ArrowLeft, Lock, Mail, User } from "lucide-react"
 import Link from "next/link"
+import Input from "@/components/ui/Input"
+import { useAuth } from "@/hooks/use_auth"
 import { useState } from "react"
+import { ArrowLeft, Lock, Mail, User } from "lucide-react"
 
 export default function Page() {
   const [name, setName] = useState("")
@@ -46,83 +47,51 @@ export default function Page() {
               Something went wrong.
             </div>
           )}
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Fullname</label>
-            <div className="relative">
-              <User className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-blue-600 transition"
-                placeholder="Jhon Doe"
-                required
-                disabled={loading}
-              />
-            </div>
-            {errors.name && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.name[0]}
-              </div>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-blue-600 transition"
-                placeholder="email@example.com"
-                required
-                disabled={loading}
-              />
-            </div>
-            {errors.email && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.email[0]}
-              </div>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-blue-600 transition"
-                placeholder="Minimum 8 characters"
-                required
-                minLength={8}
-                disabled={loading}
-              />
-            </div>
-            {errors.password && (
-              <div className="text-red-500 text-sm mt-1">
-                {errors.password[0]}
-              </div>
-            )}
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Confirm Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-500" />
-              <input
-                type="password"
-                value={passwordConfirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-                className="w-full bg-[#262626] border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:border-blue-600 transition"
-                placeholder="Confirm Password"
-                required
-                minLength={8}
-                disabled={loading}
-              />
-            </div>
-          </div>
+          <Input
+            label="Fullname"
+            icon={User}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Jhon Doe"
+            required
+            disabled={loading}
+            error={errors.name?.[0]}
+          />
+          <Input
+            label="Email"
+            icon={Mail}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email@example.com"
+            required
+            disabled={loading}
+            error={errors.email?.[0]}
+          />
+          <Input
+            label="Password"
+            icon={Lock}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Minimum 8 characters"
+            required
+            minLength={8}
+            disabled={loading}
+            error={errors.password?.[0]}
+          />
+          <Input
+            label="Confirm Password"
+            icon={Lock}
+            type="password"
+            value={passwordConfirmation}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
+            placeholder="Confirm Password"
+            required
+            minLength={8}
+            disabled={loading}
+          />
           <button
             type="submit"
             disabled={loading}
