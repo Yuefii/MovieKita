@@ -1,7 +1,8 @@
 import Image from "next/image"
+import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import { fetchTMDB } from "@/lib/tmdb"
-import { Calendar, Clock, Star } from "lucide-react"
+import { Calendar, Camera, Clock, Star } from "lucide-react"
 import { TMDB_IMG_URL, TMDB_ORIGINAL_IMG_URL } from "@/lib/env"
 
 interface Props {
@@ -58,6 +59,15 @@ export default async function Page({
             <p className="text-gray-200 text-lg leading-relaxed max-w-2xl drop-shadow-md">
               {movie.overview}
             </p>
+            <div className="pt-4">
+              <Link
+                href={`/upload?movieId=${movie.id}&movieTitle=${encodeURIComponent(movie.title)}`}
+                className="px-6 py-3 bg-blue-600 text-white font-bold rounded-md flex items-center gap-2 w-fit hover:bg-blue-600/50 transition"
+              >
+                <Camera className="w-5 h-5" />
+                Upload Momen
+              </Link>
+            </div>
           </div>
         </div>
       </div>
