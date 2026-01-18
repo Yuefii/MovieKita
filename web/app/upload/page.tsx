@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import axios from "@/lib/axios";
-import { isAxiosError } from "axios";
 import Image from "next/image";
 import Webcam from "react-webcam";
 import { useAuth } from "@/hooks/use_auth";
+import { isAxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import { OPENSTREETMAP_URL } from "@/lib/env";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, Suspense } from "react";
 import { ArrowLeft, Camera, RefreshCw, Upload, MapPin, User, AlertCircle, VideoOff } from "lucide-react";
 
-export default function Page() {
+function UploadContent() {
   const searchParams = useSearchParams();
   const movieIdParam = searchParams.get("movieId");
   const movieTitleParam = searchParams.get("movieTitle");
@@ -289,7 +289,7 @@ export default function Page() {
                   className="w-full py-4 bg-blue-600 text-white hover:bg-blue-600/50 rounded-md font-bold text-md flex items-center justify-center gap-2 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Camera className="w-6 h-6" />
-                  Take Foto
+                  Take Picture
                 </button>
               )}
             </div>
@@ -297,5 +297,19 @@ export default function Page() {
         )}
       </div>
     </div>
-  )
+  );
+}
+
+export default function Page() {
+  return (
+    <div className="bg-[#141414] min-h-screen">
+      <Suspense fallback={
+        <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+        </div>
+      }>
+        <UploadContent />
+      </Suspense>
+    </div>
+  );
 }

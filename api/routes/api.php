@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminStatsController;
 use App\Http\Controllers\MomentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::post('/moments', [MomentController::class, 'store']);
+    Route::get('/admin/stats', [AdminStatsController::class, 'index']);
 });
 
 Route::get('/moments', [MomentController::class, 'index']);

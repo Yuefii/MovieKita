@@ -53,18 +53,26 @@ export default function Navbar({
         <div className="flex items-center gap-4 text-white bg-transparent">
           {user ? (
             <div className="hidden md:flex items-center gap-4">
+              {user.role === "admin" && (
+                <Link
+                  href="/dashboard"
+                  className="px-4 py-2 text-sm font-semibold text-gray-300 hover:text-white transition hover:bg-white/10 rounded-md"
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 href="/profile"
                 className="flex items-center gap-2 hover:opacity-80 transition"
                 title="Edit Profile">
-                <div className="w-8 h-8 rounded bg-blue-600 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-md bg-blue-600 flex items-center justify-center font-bold">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm font-medium">{user.name}</span>
               </Link>
               <button
                 onClick={logout}
-                className="p-2 hover:bg-white/10 rounded-full transition text-gray-300 hover:text-white cursor-pointer"
+                className="p-2 hover:bg-white/10 rounded-md transition text-gray-300 hover:text-white cursor-pointer"
                 title="Logout"
               >
                 <LogOut className="w-5 h-5" />
