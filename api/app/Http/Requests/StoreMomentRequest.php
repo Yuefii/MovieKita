@@ -20,4 +20,15 @@ class StoreMomentRequest extends FormRequest
             'location' => 'required|string',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'location.required' => 'Location is required. Make sure GPS is enabled and location permission is granted.',
+            'image.required' => 'Image is required.',
+            'image.image' => 'File must be an image.',
+            'image.max' => 'Image size must not exceed 10MB.',
+            'user_name.required' => 'User name is required.',
+        ];
+    }
 }

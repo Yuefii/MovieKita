@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import axios from "@/lib/axios";
+import { isAxiosError } from "axios";
 import Image from "next/image";
 import Webcam from "react-webcam";
 import { useAuth } from "@/hooks/use_auth";
 import { useSearchParams } from "next/navigation";
 import { OPENSTREETMAP_URL } from "@/lib/env";
 import { useState, useRef, useCallback } from "react";
-import { ArrowLeft, Camera, RefreshCw, Upload, MapPin, User, AlertCircle } from "lucide-react";
+import { ArrowLeft, Camera, RefreshCw, Upload, MapPin, User, AlertCircle, VideoOff } from "lucide-react";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -22,10 +23,14 @@ export default function Page() {
   const [isLocating, setIsLocating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [cameraError, setCameraError] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const getLocation = useCallback(() => {
+    setLocationError(null);
     if (!navigator.geolocation) {
-      alert("geolocation is not supported by your browser");
+      setLocationError("Browser does not support geolocation");
       return;
     }
 
@@ -55,7 +60,19 @@ export default function Page() {
       (error) => {
         console.error("Error getting location:", error);
         setIsLocating(false);
-        alert("Unable to retrieve your location");
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setLocationError("Location permission denied");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setLocationError("Location information unavailable");
+            break;
+          case error.TIMEOUT:
+            setLocationError("Location timeout");
+            break;
+          default:
+            setLocationError("Failed to get location");
+        }
       }
     );
   }, []);
@@ -90,9 +107,10 @@ export default function Page() {
       alert("please ensure photo, name, and movie are present.");
       return;
     }
-    
+
     setIsUploading(true);
     setUploadStatus("idle");
+    setErrorMessage(null);
 
     try {
       const blob = base64ToBlob(imgSrc);
@@ -116,7 +134,11 @@ export default function Page() {
       setImgSrc(null);
     } catch (error) {
       setUploadStatus("error");
-      alert(`Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+      if (isAxiosError(error) && error.response) {
+        setErrorMessage(error.response.data.message || "Failed to upload moment");
+      } else {
+        setErrorMessage(error instanceof Error ? error.message : "Unknown error occurred");
+      }
     } finally {
       setIsUploading(false);
     }
@@ -163,17 +185,23 @@ export default function Page() {
         </header>
         {uploadStatus === "success" ? (
           <div className="bg-green-500/10 border border-green-500 text-green-500 p-6 rounded-md text-center space-y-4 animate-in fade-in zoom-in">
-            <h2 className="text-2xl font-bold">Berhasil!</h2>
-            <p>Momen kamu telah berhasil diupload.</p>
+            <h2 className="text-2xl font-bold">Success!</h2>
+            <p>Your moment has been successfully uploaded.</p>
             <Link
               href={`/movie/${movieIdParam}`}
               className="inline-block px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
             >
-              Kembali ke Film
+              Back to Movie
             </Link>
           </div>
         ) : (
           <div className="space-y-6">
+            {uploadStatus === "error" && errorMessage && (
+              <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-md flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <p className="text-sm font-medium">{errorMessage}</p>
+              </div>
+            )}
             <div className="space-y-2">
               <label className="text-sm text-gray-400">Your Name</label>
               <div className="w-full bg-[#262626] border border-gray-700 rounded-md p-3 text-white flex items-center gap-2">
@@ -200,10 +228,24 @@ export default function Page() {
                     className="object-cover"
                   />
                   <div className="absolute top-4 right-4 bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs flex items-center gap-2">
-                    <MapPin className="w-3 h-3 text-red-500" />
-                    {isLocating ? "Locating..." : location ? "Lokasi Tersimpan" : "No Location"}
+                    <MapPin className={`w-3 h-3 ${locationError ? "text-red-500" : "text-green-500"}`} />
+                    {isLocating ? (
+                      "Mencari lokasi..."
+                    ) : locationError ? (
+                      <span className="text-red-400">{locationError}</span>
+                    ) : location ? (
+                      <span className="max-w-[150px] truncate">{location}</span>
+                    ) : (
+                      "No Location"
+                    )}
                   </div>
                 </>
+              ) : cameraError ? (
+                <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 space-y-2 p-6 text-center">
+                  <VideoOff className="w-12 h-12 mb-2" />
+                  <p className="font-semibold">Camera Not Available</p>
+                  <p className="text-xs">Please ensure camera permission is granted.</p>
+                </div>
               ) : (
                 <Webcam
                   audio={false}
@@ -211,6 +253,7 @@ export default function Page() {
                   screenshotFormat="image/jpeg"
                   className="w-full h-full object-cover"
                   videoConstraints={{ facingMode: "user" }}
+                  onUserMediaError={() => setCameraError(true)}
                 />
               )}
             </div>
@@ -242,7 +285,8 @@ export default function Page() {
               ) : (
                 <button
                   onClick={capture}
-                  className="w-full py-4 bg-blue-600 text-white hover:bg-blue-600/50 rounded-md font-bold text-md flex items-center justify-center gap-2 transition cursor-pointer"
+                  disabled={cameraError}
+                  className="w-full py-4 bg-blue-600 text-white hover:bg-blue-600/50 rounded-md font-bold text-md flex items-center justify-center gap-2 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Camera className="w-6 h-6" />
                   Take Foto
