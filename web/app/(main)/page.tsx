@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link";
+
 import Navbar from "@/components/Navbar";
 import MovieList from "@/components/MovieList";
 import MovieSlider from "@/components/MovieSlider";
@@ -66,14 +68,23 @@ export default function Page() {
             </div>
             <div className="animate-in fade-in duration-500">
               {category === "popular" && movies.popular && (
-                <MovieList title="Popular" movies={movies.popular.results} />
+                <MovieList title="Popular Movies" movies={movies.popular.results.slice(0, 12)} />
               )}
               {category === "top_rated" && movies.topRated && (
-                <MovieList title="Top Rated" movies={movies.topRated.results} />
+                <MovieList title="Top Rated Movies" movies={movies.topRated.results.slice(0, 12)} />
               )}
               {category === "upcoming" && movies.upcoming && (
-                <MovieList title="Upcoming Movies" movies={movies.upcoming.results} />
+                <MovieList title="Upcoming Movies" movies={movies.upcoming.results.slice(0, 12)} />
               )}
+            </div>
+
+            <div className="flex justify-center pb-8">
+              <Link
+                href={`/category/${category}`}
+                className="px-8 py-3 rounded-md bg-blue-600/20 border border-blue-500/50 hover:bg-blue-600 hover:text-white text-blue-200 transition-all duration-300 font-semibold flex items-center gap-2"
+              >
+                Show More
+              </Link>
             </div>
           </div>
         </div>
