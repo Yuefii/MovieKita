@@ -17,8 +17,8 @@ class MomentController extends Controller
 
     $moments = UserMoment::where('movie_id', $request->movie_id)
       ->orderBy('created_at', 'desc')
-      ->get()
-      ->map(function ($moment) {
+      ->paginate(4)
+      ->through(function ($moment) {
         return [
           'id' => $moment->id,
           'user_name' => $moment->user_name,

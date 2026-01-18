@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
+import MovieMoment from "@/components/MovieMoment"
 import { fetchTMDB } from "@/lib/tmdb"
 import { Calendar, Camera, Clock, Star } from "lucide-react"
 import { TMDB_IMG_URL, TMDB_ORIGINAL_IMG_URL } from "@/lib/env"
@@ -70,6 +71,9 @@ export default async function Page({
             </div>
           </div>
         </div>
+      </div>
+      <div className="px-8 pb-24 max-w-7xl mx-auto">
+        <MovieMoment movieId={movie.id.toString()} />
       </div>
     </div>
   )
