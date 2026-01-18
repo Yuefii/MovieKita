@@ -1,16 +1,21 @@
 "use client"
 
-import { Menu, Search } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/use_auth";
+import { LogOut, Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Props {
   onSearch?: (query: string) => void
 }
 
-export default function Navbar({ onSearch }: Props) {
+export default function Navbar({
+  onSearch
+}: Props) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,15 +51,50 @@ export default function Navbar({ onSearch }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-4 text-white bg-transparent">
-          <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {user ? (
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                href="/profile"
+                className="flex items-center gap-2 hover:opacity-80 transition"
+                title="Edit Profile">
+                <div className="w-8 h-8 rounded bg-blue-600 flex items-center justify-center font-bold">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-medium">{user.name}</span>
+              </Link>
+              <button
+                onClick={logout}
+                className="p-2 hover:bg-white/10 rounded-full transition text-gray-300 hover:text-white cursor-pointer"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
+          ) : (
+            <Link href="/login" className="bg-blue-600 text-white px-4 py-1.5 rounded text-sm font-semibold hover:bg-blue-600/50 transition">
+              Login
+            </Link>
+          )}
+          <button
+            className="md:hidden text-white"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <Menu className="w-8 h-8" />
           </button>
         </div>
       </div>
-
       {isMobileMenuOpen && (
         <div className="md:hidden bg-zinc-900 absolute top-16 left-0 w-full p-4 flex flex-col gap-4 text-center text-sm text-gray-400 font-medium border-t border-gray-800 animate-in slide-in-from-top-2">
-          {/* TODO: navigasi list */}
+          {user ? (
+            <>
+              <button onClick={logout} className="hover:text-white py-2 w-full border-t border-gray-800 mt-2">
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="hover:text-white py-2">Login</Link>
+          )}
         </div>
       )}
     </header>

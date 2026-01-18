@@ -1,4 +1,5 @@
 export const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || ""
 export const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL || ""
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || ""
 export const TMDB_IMG_URL = "https://image.tmdb.org/t/p/w500"
 export const TMDB_ORIGINAL_IMG_URL = "https://image.tmdb.org/t/p/original"
