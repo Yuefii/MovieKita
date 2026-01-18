@@ -79,5 +79,6 @@ export const useAuth = ({
         register,
         login,
         logout,
+        mutate
     }
 }
