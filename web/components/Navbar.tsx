@@ -1,9 +1,9 @@
 "use client"
 
-import Link from "next/link";
-import { useAuth } from "@/hooks/use_auth";
-import { LogOut, Menu, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import Link from "next/link"
+import { useAuth } from "@/hooks/use_auth"
+import { LogOut, Menu, Search } from "lucide-react"
+import { useEffect, useState } from "react"
 
 interface Props {
   onSearch?: (query: string) => void
@@ -38,7 +38,7 @@ export default function Navbar({
       <div className="flex items-center justify-between px-4 md:px-12 h-16 md:h-20">
         <div className="flex items-center gap-4 md:gap-10">
           <Link href="/" className="text-white text-2xl md:text-3xl font-bold cursor-pointer tracking-wider">
-            MOVIEKITA
+            MOVIE<span className="text-blue-500">KITA</span>
           </Link>
           <div className="hidden md:flex items-center bg-zinc-800/80 border border-gray-700 rounded-full px-3 py-1.5 transition-all focus-within:border-gray-500 focus-within:bg-zinc-800">
             <Search className="w-4 h-4 text-gray-400" />
