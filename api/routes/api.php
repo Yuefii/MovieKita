@@ -13,7 +13,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::post('/moments', [MomentController::class, 'store']);
-    Route::get('/admin/stats', [AdminStatsController::class, 'index']);
+    
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/admin/stats', [AdminStatsController::class, 'index']);
+    });
 });
 
 Route::get('/moments', [MomentController::class, 'index']);
