@@ -2,16 +2,10 @@
 
 import Link from "next/link"
 import { useAuth } from "@/hooks/use_auth"
-import { LogOut, Menu, Search } from "lucide-react"
+import { LogOut, Menu } from "lucide-react"
 import { useEffect, useState } from "react"
 
-interface Props {
-  onSearch?: (query: string) => void
-}
-
-export default function Navbar({
-  onSearch
-}: Props) {
+export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -40,15 +34,6 @@ export default function Navbar({
           <Link href="/" className="text-white text-2xl md:text-3xl font-bold cursor-pointer tracking-wider">
             MOVIE<span className="text-blue-500">KITA</span>
           </Link>
-          <div className="hidden md:flex items-center bg-zinc-800/80 border border-gray-700 rounded-full px-3 py-1.5 transition-all focus-within:border-gray-500 focus-within:bg-zinc-800">
-            <Search className="w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search movies..."
-              className="bg-transparent border-none text-white text-sm outline-none ml-2 w-48 lg:w-64 placeholder-gray-400"
-              onChange={(e) => onSearch?.(e.target.value)}
-            />
-          </div>
         </div>
         <div className="flex items-center gap-4 text-white bg-transparent">
           {user ? (
