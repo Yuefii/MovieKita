@@ -64,7 +64,7 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <Link href="/login" className="bg-blue-600 text-white px-4 py-1.5 rounded text-sm font-semibold hover:bg-blue-600/50 transition">
+            <Link href="/login" className="hidden md:block bg-blue-600 text-white px-4 py-1.5 rounded text-sm font-semibold hover:bg-blue-600/50 transition">
               Login
             </Link>
           )}
@@ -79,6 +79,20 @@ export default function Navbar() {
         <div className="md:hidden bg-zinc-900 absolute top-16 left-0 w-full p-4 flex flex-col gap-4 text-center text-sm text-gray-400 font-medium border-t border-gray-800 animate-in slide-in-from-top-2">
           {user ? (
             <>
+              {user.role === "admin" && (
+                <Link
+                  href="/dashboard"
+                  className="hover:text-white py-2"
+                >
+                  Dashboard
+                </Link>
+              )}
+              <Link
+                href="/profile"
+                className="hover:text-white py-2"
+              >
+                Profile
+              </Link>
               <button onClick={logout} className="hover:text-white py-2 w-full border-t border-gray-800 mt-2">
                 Logout
               </button>
